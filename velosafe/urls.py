@@ -7,7 +7,7 @@ from rest_framework.routers import DefaultRouter
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="hackyeah2024 API",
+        title="velosafe API",
         default_version="v1",
         contact=openapi.Contact(email="mail@example.com"),
     ),

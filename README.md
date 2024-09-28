@@ -1,4 +1,4 @@
-# hackyeah2024
+# velosafe
 
 [![CI](https://github.com/github_username/hackyeah2024/actions/workflows/backend.yml/badge.svg)](https://github.com/github_username/hackyeah2024/actions)
 
@@ -21,9 +21,9 @@ Project for hackyeah 2024
 First create postgresql database:
 
 ```sql
-create user hackyeah2024 with createdb;
-alter user hackyeah2024 password 'hackyeah2024';
-create database hackyeah2024 owner hackyeah2024;
+create user velosafe with createdb;
+alter user velosafe password 'velosafe';
+create database velosafe owner velosafe;
 ```
 Now you can setup virtualenv and django:
 ```bash

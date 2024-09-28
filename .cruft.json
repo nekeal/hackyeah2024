@@ -4,8 +4,8 @@
   "checkout": null,
   "context": {
     "cookiecutter": {
-      "project_name": "hackyeah2024",
-      "full_project_name": "hackyeah2024",
+      "project_name": "velosafe",
+      "full_project_name": "velosafe",
       "python_version": "3.12+",
       "_python_version_specs": {
         "3.8+": {

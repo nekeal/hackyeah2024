@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from hackyeah2024.accounts.models import CustomUser
+from velosafe.accounts.models import CustomUser
 
 
 @admin.register(CustomUser)

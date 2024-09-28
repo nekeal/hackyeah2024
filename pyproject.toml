@@ -70,7 +70,7 @@ omit = [
 ]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "hackyeah2024.settings.tests"
+DJANGO_SETTINGS_MODULE = "velosafe.settings.tests"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 norecursedirs = ["deployment*",
                  ".git/*",
@@ -86,7 +86,7 @@ plugins = ["mypy_django_plugin.main"]
 check_untyped_defs = true
 
 [tool.django-stubs]
-django_settings_module = "hackyeah2024.settings.local"
+django_settings_module = "velosafe.settings.local"
 
 [[tool.mypy.overrides]]
 module = [

@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils import timezone
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hackyeah2024.settings.local")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "velosafe.settings.local")
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class Celery(BaseCelery):
         return timezone.localtime()
 
 
-app = Celery("hackyeah2024")
+app = Celery("velosafe")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 # Load task modules from all registered Django app configs.
@@ -29,7 +29,7 @@ app.autodiscover_tasks()
 
 
 # NOTE: start celery locally (in order to connect to all the queues):
-# celery -A hackyeah2024 worker -E -l INFO
+# celery -A velosafe worker -E -l INFO
 @app.task(bind=True)
 def debug_task(self):
     """

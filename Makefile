@@ -46,20 +46,20 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 test: ## run tests quickly with the default Python
-	pytest hackyeah2024
+	pytest velosafe
 coverage: ## check code coverage quickly with the default Python
-	pytest --cov=hackyeah2024 hackyeah2024
+	pytest --cov=velosafe velosafe
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
 quality-check: ## check quality of code
-	ruff format hackyeah2024
-	ruff check hackyeah2024
-	dmypy run hackyeah2024
+	ruff format velosafe
+	ruff check velosafe
+	dmypy run velosafe
 
 autoformatters: ## runs auto formatters
-	ruff format hackyeah2024
+	ruff format velosafe
 
 _install_pip_tools:
 	python -m piptools > /dev/null 2>&1 || pip install pip-tools

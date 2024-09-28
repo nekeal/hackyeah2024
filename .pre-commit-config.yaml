@@ -33,7 +33,7 @@ repos:
       - id: mypy-check
         language: system
         name: Check for mypy
-        entry: bash -c 'mypy hackyeah2024'
+        entry: bash -c 'mypy velosafe'
         stages: [ commit ]
         files: ".+\\.py$"
         require_serial: true

@@ -14,11 +14,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
-      - "traefik.http.routers.hackyeah2024.entrypoints=websecure"
-      - "traefik.http.routers.hackyeah2024.rule=Host(`${COMPOSE_DOMAIN_NAME}`)"
-      - "traefik.http.services.hackyeah2024.loadbalancer.server.port=8010"
-      - "traefik.http.routers.hackyeah2024.tls=true"
-    command: "gunicorn hackyeah2024.wsgi -w 4 -b 0.0.0.0:8010"
+      - "traefik.http.routers.velosafe.entrypoints=websecure"
+      - "traefik.http.routers.velosafe.rule=Host(`${COMPOSE_DOMAIN_NAME}`)"
+      - "traefik.http.services.velosafe.loadbalancer.server.port=8010"
+      - "traefik.http.routers.velosafe.tls=true"
+    command: "gunicorn velosafe.wsgi -w 4 -b 0.0.0.0:8010"
     depends_on:
       - migrations
   migrations:
@@ -35,7 +35,7 @@ services:
         target: /app/public
         type: volume
         volume:
-          subpath: "hackyeah2024"
+          subpath: "velosafe"
     depends_on:
       - backend
 

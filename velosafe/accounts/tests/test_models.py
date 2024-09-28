@@ -3,7 +3,7 @@ from unittest.mock import Mock
 import pytest
 from django.contrib.auth.models import AbstractUser
 
-from hackyeah2024.accounts.models import CustomUser
+from velosafe.accounts.models import CustomUser
 
 
 class TestCustomUser:

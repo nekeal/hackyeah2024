@@ -8,7 +8,7 @@ from .conf.celery_settings import *
 
 env = Env()
 
-PROJECT_NAME = "hackyeah2024"
+PROJECT_NAME = "velosafe"
 
 BASE_DIR = Path(__file__).parents[2]
 APPS_DIR = BASE_DIR.joinpath(PROJECT_NAME)
@@ -43,7 +43,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "hackyeah2024.accounts.apps.AccountsConfig",
+    "velosafe.accounts.apps.AccountsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -64,8 +64,8 @@ MIDDLEWARE = [
 ]
 
 # ------------- URLS -------------
-ROOT_URLCONF = "hackyeah2024.urls"
-WSGI_APPLICATION = "hackyeah2024.wsgi.application"
+ROOT_URLCONF = "velosafe.urls"
+WSGI_APPLICATION = "velosafe.wsgi.application"
 
 # ------------- TEMPLATES -------------
 TEMPLATES = [
