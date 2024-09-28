@@ -20,9 +20,7 @@ router = DefaultRouter()
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
-    path(
-        "api/doc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
-    ),
+    path("api/doc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path(
         "api/swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),
@@ -30,4 +28,5 @@ urlpatterns = [
     ),
     path("__debug__/", include("debug_toolbar.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
+    path("", include("velosafe.maps.urls")),
 ]

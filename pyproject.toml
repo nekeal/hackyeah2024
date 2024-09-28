@@ -105,3 +105,16 @@ ignore_missing_imports = true
 [[tool.mypy.overrides]]
 module = "django_extensions.*"
 ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "celery.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "drf_yasg.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "djoser.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "geojson.*"
+ignore_missing_imports = true
+
