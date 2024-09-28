@@ -28,4 +28,5 @@ urlpatterns = [
     ),
     path("__debug__/", include("debug_toolbar.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
+    path("", include("velosafe.maps.urls")),
 ]
