@@ -44,6 +44,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "velosafe.accounts.apps.AccountsConfig",
+    "velosafe.maps",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
