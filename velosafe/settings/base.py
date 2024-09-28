@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from environs import Env
+
 # noinspection PyUnresolvedReferences
 # flake8: noqa
 from .conf.theme import *
@@ -145,8 +146,6 @@ INTERNAL_IPS = [
 
 # ------------- REST FRAMEWORK ------------
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
 }
