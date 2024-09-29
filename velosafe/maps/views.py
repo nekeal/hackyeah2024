@@ -1,5 +1,7 @@
 from django import forms
+from django.core.cache import cache
 from django.http import HttpResponse
+from django.views import View
 from django.views.generic import TemplateView, FormView
 
 from velosafe.route_planning.facade import GeneralRoadTypes, RoutePlanningFacade, RoutePlanningInput, \
@@ -7,6 +9,7 @@ from velosafe.route_planning.facade import GeneralRoadTypes, RoutePlanningFacade
 
 from velosafe.maps.maps import MapService
 from velosafe.route_planning.point import Point
+from velosafe.utils import get_hash
 
 
 class MapView(TemplateView):
@@ -57,6 +60,25 @@ class PreferencesFormView(FormView):
             safety_factor=form.cleaned_data["safety_factor"],
         ))
         result = RoutePlanningFacade().plan_route(facade_input)
-        print("Respone", result, type(result))
+        # print("Respone", result, type(result))
         return HttpResponse(result)
 
+
+class UserRouteView(View):
+
+    def get(self, request, *args, **kwargs):
+        form = PreferencesForm(request.GET)
+        form.is_valid()
+        points = self.request.GET.getlist("points[]")
+        facade_input = RoutePlanningInput(points=[Point(float(x),float(y)) for x,y in zip(points[:-1:2], points[1::2])], preference=RoutePlanningPreferences(
+            max_allowed_speed=form.cleaned_data["max_allowed_speed"],
+            street_light=form.cleaned_data["street_light"],
+            allowed_road_types=form.cleaned_data["allowed_road_types"],
+            safety_factor=form.cleaned_data["safety_factor"],
+        ))
+        cache_key = get_hash(facade_input)
+        if result := cache.get(cache_key):
+            return HttpResponse(result)
+        result = RoutePlanningFacade().plan_route(facade_input)
+        cache.set(cache_key, result)
+        return HttpResponse(result)

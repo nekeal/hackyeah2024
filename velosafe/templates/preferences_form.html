@@ -12,22 +12,17 @@
 
 
 {% block content %}
-
-<div class="container">
-    <div class="container">
-        <div class="container">
-            <h1>{% translate 'Plan your route' %}</h1>
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="col-12 col-md-2">
-                        <form method="post" action="">
+{#            <div class="container mt-0 mb-0 min-vh-100 vh-100 vw-100">#}
+                <div class="row m-0 mt-100">
+                    <div class="col-2 col-md-2">
+                        <form method="GET" target="_blank" action="/user-form/" id="preferencesform">
                             {% csrf_token %}
                             <div class="mb-3">
                                 {{ form.max_allowed_speed.label_tag }}
                                 <span class="text-nowrap d-flex gap-2">
                                 <input type="range" class="form-range" id="{{ form.max_allowed_speed.id_for_label }}" name="max_allowed_speed" min="20" max="120" step="10" {% if form.max_allowed_speed.widget.value != None %} value="{{ form.max_allowed_speed.widget.value|stringformat:'s' }}"{% endif %} oninput="this.nextElementSibling.value = this.value">
                                 <output>{{ form.max_allowed_speed.initial }}</output>
-
+                                </span>
                                 {% if form.max_allowed_speed.errors %}
                                     <div class="text-danger">
                                         {{ form.max_allowed_speed.errors }}
@@ -40,7 +35,7 @@
                                     <i class="fas fa-lightbulb fs-2" id="bulb-icon"></i>
                                 </span>
 {#                                <input type="hidden" id="street_light" name="street_light" value="on">#}
-                                <input type="checkbox" id="street_light" name="street_light">
+                                <input type="checkbox" class="d-none" id="street_light" name="street_light">
 {#                            {{ form.street_light }}#}
                                 {% if form.street_light.errors %}
                                     <div class="text-danger">
@@ -94,9 +89,13 @@
                                 <label for="points">{% translate 'Points' %}</label>
                                 <div id="points-container">
                                     <!-- Initial point fields -->
-                                    <div class="point-field">
-                                        <input type="text" name="points[]" placeholder="Latitude" class="form-control mb-2">
-                                        <input type="text" name="points[]" placeholder="Longitude" class="form-control mb-2">
+                                    <div class="point-field border border-dark border-1 mb-2">
+                                        <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
+                                        <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1">
+                                    </div>
+                                    <div class="point-field border border border-dark border-1 mb-2">
+                                        <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
+                                        <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1">
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-secondary" onclick="addPointField()">Add Point</button>
@@ -105,11 +104,14 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
+                    <div class="col-10 col-md-10 mb-10">
+                        <iframe class="w-100 h-100 vh-100 mb-10 p-10" src="http://localhost:8000/user-route/?csrfmiddlewaretoken=76QetALc4wqkp8XV7R7A67QCqqHM3eDwLhcIpkga2kcwgjx7Q66QG6zf00kh&max_allowed_speed=71&street_light=on&allowed_road_types=road&allowed_road_types=street&allowed_road_types=track&allowed_road_types=bike_path&safety_factor=3&bike_path_preference=3&points%5B%5D=49.473743&points%5B%5D=20.015556&points%5B%5D=49.513019&points%5B%5D=20.066818" ></iframe>
                 </div>
-            </div>
-        </div>
-    </div>
+{#                </div>#}
+
+
     <script src="https://kit.fontawesome.com/841c2adb50.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function toggleStreetLight() {
             const bulbIcon = document.getElementById('bulb-icon');
@@ -146,8 +148,10 @@
             const pointField = document.createElement('div');
             pointField.className = 'point-field';
             pointField.innerHTML = `
-            <input type="text" name="points[]" placeholder="Latitude" class="form-control mb-2">
+            <div class="point-field border border-dark border-1 mb-2">
+            <input type="text" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
             <input type="text" name="points[]" placeholder="Longitude" class="form-control mb-2">
+            </div>
             <button type="button" class="btn btn-danger mb-2" onclick="removePointField(this)">Remove</button>
         `;
             container.appendChild(pointField);
@@ -157,5 +161,21 @@
             const pointField = button.parentElement;
             pointField.remove();
         }
+        $("#preferencesform").on('submit', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/user-route/',
+                method: 'get',
+                data: $(this).serialize(),
+
+                success: function(response) {
+                    $("#map-container").html(response);
+                    window.respone = response;
+                    {#$('#elementYouWantRemove').remove();#}
+                    {#$('#whereYouWantAddNewContent').append('<p> New content </p>')#}
+                }
+            })
+        });
     </script>
 {% endblock content %}
