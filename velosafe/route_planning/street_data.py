@@ -1,4 +1,7 @@
 import osmnx as ox
+import numpy as np
+
+from velosafe.route_planning.point import Point
 
 class StreetData:
     @staticmethod
@@ -8,10 +11,11 @@ class StreetData:
         return G
 
     @staticmethod
-    def consolidate_intersections(G):
+    def consolidate_intersections(G, tolerance=15):
         G = ox.consolidate_intersections(
-            G, rebuild_graph=True, tolerance=15, dead_ends=False
+            G, rebuild_graph=True, tolerance=tolerance, dead_ends=False
         )
+
         nodes, edges = ox.graph_to_gdfs(G)
         G = ox.graph_from_gdfs(nodes, edges.explode("highway"))
         return G
@@ -37,6 +41,19 @@ class StreetData:
         G = ox.graph_from_gdfs(nodes, edges)
 
         return G
+    
+    @staticmethod
+    def get_closest_node_id(G, point: Point):
+        nodes, _ = ox.graph_to_gdfs(G)
+
+        # Euclidean distance
+        nodes["distance"] = np.sqrt(
+            np.square(nodes["lon"].fillna(0) - point.longitude)
+            + np.square(nodes["lat"].fillna(0) - point.latitude)
+        )
+
+        return nodes["distance"].idxmin()
+
 
     @staticmethod
     def save(G, filename):

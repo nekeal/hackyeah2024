@@ -2,7 +2,7 @@ import osmnx as ox
 
 class Weights:
     def __init__(self, safety_factor: int, bike_lane_preference: int):
-        self.ROUDTYPE_WEIGHT = 5 * (safety_factor - 1) ** 2
+        self.ROADTYPE_WEIGHT = 5 * (safety_factor - 1) ** 2
         self.MAX_SPEED_WEIGHT = 5 * (safety_factor - 1) ** 2
         self.LENGTH_WEIGHT = 1
         self.ROADTYPE_WEIGHTS = {
@@ -25,8 +25,8 @@ class Weights:
     def get_weight_by_maxspeed(self, record):
         if record["highway"] in ["primary", "secondary", "tertiary"]:
             if int(record["maxspeed"]) > 30:
-                return self.MAXSPEED_WEIGHT * int(record["maxspeed"]) / 30
-        return self.MAXSPEED_WEIGHT
+                return self.MAX_SPEED_WEIGHT * int(record["maxspeed"]) / 30
+        return self.MAX_SPEED_WEIGHT
 
     def get_weight_by_length(self, record):
         return self.LENGTH_WEIGHT * record["length"]
