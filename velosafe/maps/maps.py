@@ -27,8 +27,11 @@ class MapService:
 
         route.add_to(self.map)
 
-    def add_route_from_geojson(self, data):
-        folium.GeoJson(data).add_to(self.map)
+    def add_route_from_geojson(self, data, style_function=None, color=None):
+        if color:
+            style_function = lambda x: {"color": color}
+
+        folium.GeoJson(data, style_function=style_function).add_to(self.map)
 
     def get_html(self):
         return self.map.get_root().render()

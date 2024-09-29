@@ -7,12 +7,14 @@ from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 from functools import reduce
 import networkx as nx
+import osmnx as ox
 
 from velosafe.route_planning.geojson_generator import GeoJsonGenerator
 from velosafe.route_planning.point import Point
 from velosafe.route_planning.street_data import StreetData
 from velosafe.route_planning.weights import Weights
 from velosafe.route_planning.route import Route
+from velosafe.maps.maps import MapService
 
 
 class LinkTypes(TextChoices):
@@ -67,7 +69,14 @@ class RoutePlanningFacade:
 
             routes.append(Route.find(G, start_node, end_node))
 
-        return reduce(lambda r1, r2: nx.disjoint_union(r1, r2), routes)
+        G = reduce(lambda r1, r2: nx.disjoint_union(r1, r2), routes)
+
+        nodes, edges = ox.graph_to_gdfs(G)
+
+        M = MapService(ox.geocode('Nowy Targ'))
+        M.add_route_from_geojson(edges)
+
+        return M.get_html()
 
 
 if __name__ == "__main__":
