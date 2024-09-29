@@ -1,7 +1,9 @@
 from django import forms
 from django.core.cache import cache
 from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.views.generic import TemplateView, FormView, View
+from networkx.exception import NetworkXNoPath
 
 from velosafe.route_planning.facade import GeneralRoadTypes, RoutePlanningFacade, RoutePlanningInput, \
     RoutePlanningPreferences
@@ -84,6 +86,9 @@ class UserRouteView(View):
         cache_key = get_hash(facade_input)
         if result := cache.get(cache_key):
             return HttpResponse(result)
-        result = RoutePlanningFacade().plan_route(facade_input)
+        try:
+            result = RoutePlanningFacade().plan_route(facade_input)
+        except NetworkXNoPath as e:
+            result = render_to_string("error.html")
         cache.set(cache_key, result)
         return HttpResponse(result)
