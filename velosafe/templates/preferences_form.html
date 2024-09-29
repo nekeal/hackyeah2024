@@ -164,12 +164,12 @@
                     <div id="points-container">
                         <!-- Initial point fields -->
                         <div class="point-field border-bottom border-black-50 border-2 mb-2">
-                            <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
-                            <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1">
+                            <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1" value="49.473743" readonly>
+                            <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1" value="20.015556" readonly>
                         </div>
                         <div class="point-field border-bottom border-black-50 border-2 mb-2">
-                            <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
-                            <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1">
+                            <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1" value="49.513019" readonly>
+                            <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1" value="20.066818" readonly>
                         </div>
                     </div>
 
@@ -190,6 +190,7 @@
     <script src="https://kit.fontawesome.com/841c2adb50.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
+        
         function toggleStreetLight() {
             const bulbIcon = document.getElementById('bulb-icon');
             const streetLightInput = document.getElementById('street_light');
@@ -226,8 +227,8 @@
             pointField.className = 'point-field';
             pointField.innerHTML = `
             <div class="point-field border-bottom border-black-50 border-2 mb-2">
-            <input type="text" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
-            <input type="text" name="points[]" placeholder="Longitude" class="form-control mb-2">
+            <input type="text" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1" readonly>
+            <input type="text" name="points[]" placeholder="Longitude" class="form-control mb-2" readonly>
             </div>
             <button type="button" class="btn btn-danger mb-2" onclick="removePointField(this)">Remove</button>
         `;

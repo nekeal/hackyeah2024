@@ -1,9 +1,8 @@
 from django.urls import include, path
-from velosafe.maps.views import map_view
-
+from velosafe.maps.views import PreferencesFormView
 
 app_name = "maps"
 
 urlpatterns = [
-    path(r"", map_view, name="map"),
+    path(r"", PreferencesFormView.as_view(), name="map"),
 ]
