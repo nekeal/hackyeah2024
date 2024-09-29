@@ -96,7 +96,42 @@ class RoutePlanningFacade:
         nodes, edges = ox.graph_to_gdfs(G)
 
         M = MapService(ox.geocode("Nowy Targ"))
-        M.add_route_from_geojson(edges)
+        color_map = {
+            "cycleway": "blue",
+            "path": "blue",
+            "pedestrian": "green",
+            "track": "blue",
+            "residential": "red",
+            "living_street": "red",
+            "service": "red",
+            "tertiary": "red",
+            "secondary": "black",
+            "primary": "black",
+            "other": "red",
+            "primary_link": "black",
+            "secondary_link": "black",
+            "tertiary_link": "red",
+            "unclassified": "red",
+        }
+        for key, color in color_map.items():
+            sub_nodes, sub_edges = ox.graph_to_gdfs(G)
+            filtered_edges = sub_edges[sub_edges["highway"] == key]
+            if filtered_edges.empty:
+                continue
+            sub_G = ox.graph_from_gdfs(sub_nodes, filtered_edges)
+            style_function = (lambda x: {"color": color})
+            _, sub_e = ox.graph_to_gdfs(sub_G)
+            M.add_route_from_geojson(sub_e, style_function=style_function)
+            
+
+        sub_nodes, sub_edges = ox.graph_to_gdfs(G)
+        filtered_edges = sub_edges[sub_edges["highway"].isin(color_map.keys()) == False]
+        if filtered_edges.empty:
+            return
+        sub_G = ox.graph_from_gdfs(sub_nodes, filtered_edges)
+        style_function = (lambda x: {"color": color})
+        _, sub_e = ox.graph_to_gdfs(sub_G)
+        M.add_route_from_geojson(sub_e, style_function=style_function)
 
         return M.get_html()
     
