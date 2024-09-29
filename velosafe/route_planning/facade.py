@@ -146,6 +146,7 @@ class RoutePlanningFacade:
             filtered_edges = sub_edges[sub_edges["highway"] == key]
             if filtered_edges.empty:
                 continue
+            print(filtered_edges)
             sub_G = ox.graph_from_gdfs(sub_nodes, filtered_edges)
             style_function = (lambda x: {"color": color})
             _, sub_e = ox.graph_to_gdfs(sub_G)
@@ -155,11 +156,12 @@ class RoutePlanningFacade:
         sub_nodes, sub_edges = ox.graph_to_gdfs(G)
         filtered_edges = sub_edges[sub_edges["highway"].isin(color_map.keys()) == False]
         if filtered_edges.empty:
-            return
+            return M.get_html()
         sub_G = ox.graph_from_gdfs(sub_nodes, filtered_edges)
         style_function = (lambda x: {"color": color})
         _, sub_e = ox.graph_to_gdfs(sub_G)
         M.add_route_from_geojson(sub_e, style_function=style_function)
+        print(M.map)
 
         return M.get_html()
     
