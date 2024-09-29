@@ -74,6 +74,7 @@ class UserRouteView(View):
             max_allowed_speed=form.cleaned_data["max_allowed_speed"],
             street_light=form.cleaned_data["street_light"],
             allowed_road_types=form.cleaned_data["allowed_road_types"],
+            bike_path_preference=form.cleaned_data["bike_path_preference"],
             safety_factor=form.cleaned_data["safety_factor"],
         ))
         cache_key = get_hash(facade_input)
