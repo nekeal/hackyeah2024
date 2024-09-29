@@ -83,7 +83,7 @@
                     <div id="allowed_road_types">
                         <select class="form-select form-select-sm" name="{{ form.allowed_road_types.name }}" id="{{ form.allowed_road_types.name }}" multiple>
                         {% for  key, value in form.allowed_road_types.field.choices %}
-                            <option value="{{ key }}" {% if key == 'bike_path' %}selected{% endif %}>{{ value }}</option>
+                            <option selected value="{{ key }}" {% if key == 'bike_path' %}selected{% endif %}>{{ value }}</option>
                         {% endfor %}
                         </select>
                     </div>
