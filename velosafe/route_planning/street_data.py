@@ -3,6 +3,7 @@ import numpy as np
 
 from velosafe.route_planning.point import Point
 
+
 class StreetData:
     @staticmethod
     def download(city, network_type="all"):
@@ -12,10 +13,7 @@ class StreetData:
 
     @staticmethod
     def consolidate_intersections(G, tolerance=15):
-        G = ox.consolidate_intersections(
-            G, rebuild_graph=True, tolerance=tolerance, dead_ends=False
-        )
-
+        G = ox.consolidate_intersections(G, rebuild_graph=True, tolerance=tolerance, dead_ends=False)
         nodes, edges = ox.graph_to_gdfs(G)
         G = ox.graph_from_gdfs(nodes, edges.explode("highway"))
         return G
@@ -34,14 +32,12 @@ class StreetData:
 
         nodes, edges = ox.graph_to_gdfs(G)
 
-        edges["maxspeed"] = (
-            edges["maxspeed"].fillna(DEFAULT_SPEED).apply(reduce_max_speed)
-        )
+        edges["maxspeed"] = edges["maxspeed"].fillna(DEFAULT_SPEED).apply(reduce_max_speed)
 
         G = ox.graph_from_gdfs(nodes, edges)
 
         return G
-    
+
     @staticmethod
     def get_closest_node_id(G, point: Point):
         nodes, _ = ox.graph_to_gdfs(G)
@@ -66,4 +62,3 @@ class StreetData:
     @staticmethod
     def show(G):
         return ox.plot_graph(G)
-    

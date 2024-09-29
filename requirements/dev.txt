@@ -91,6 +91,7 @@ django==5.1.1
     #   djangorestframework-simplejwt
     #   djoser
     #   drf-yasg
+    #   iommi
     #   social-auth-app-django
 django-dbbackup==4.2.1
     # via -r requirements/base.txt
@@ -161,6 +162,8 @@ inflection==0.5.1
     #   drf-yasg
 iniconfig==2.0.0
     # via pytest
+iommi==7.5.1
+    # via -r requirements/base.txt
 ipython==8.27.0
     # via -r requirements/base.txt
 jedi==0.19.1
@@ -260,6 +263,10 @@ pyjwt==2.9.0
     #   -r requirements/base.txt
     #   djangorestframework-simplejwt
     #   social-auth-core
+pyparsing==3.1.4
+    # via
+    #   -r requirements/base.txt
+    #   iommi
 pytest==8.3.3
     # via
     #   -r requirements/dev.in

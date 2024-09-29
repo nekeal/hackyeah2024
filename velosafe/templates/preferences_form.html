@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block extra_head %}
+    <style>
+        .yellow-bulb {
+            color: #efb60f;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="container">
+        <div class="container">
+            <h1>{% translate 'Plan your route' %}</h1>
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-12 col-md-2">
+                        <form method="get" action="">
+                            <div class="mb-3">
+                                {{ form.max_allowed_speed.label_tag }}
+                                <span class="text-nowrap d-flex gap-2">
+                                <div>"{{ form.max_allowed_speed.field.widget.initial }}"</div>
+
+                                <input type="range" class="form-range" id="{{ form.max_allowed_speed.id_for_label }}" name="max_allowed_speed" min="20" max="120" step="10" {% if form.max_allowed_speed.widget.value != None %} value="{{ form.max_allowed_speed.widget.value|stringformat:'s' }}"{% endif %} oninput="this.nextElementSibling.value = this.value">
+                                <output>{{ form.max_allowed_speed.initial }}</output>
+
+                                {% if form.max_allowed_speed.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.max_allowed_speed.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <span id="street-light-icon" class="text-nowrap" onclick="toggleStreetLight()">
+                                {{ form.street_light.label_tag }}
+                                    <i class="fas fa-lightbulb fs-2" id="bulb-icon"></i>
+                                </span>
+                                <input type="hidden" id="street_light" name="street_light" value="{{ form.street_light.value }}">
+                                {% if form.street_light.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.street_light.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.allowed_road_types.label_tag }}
+                                <div id="allowed_road_types">
+                                    <select class="form-select form-select-sm" name="{{ form.allowed_road_types.name }}" id="{{ form.allowed_road_types.name }}" multiple>
+                                    {% for choice in form.allowed_road_types %}
+                                        <option value="{{ choice.value }}" {% if choice.selected %}selected{% endif %}>{{ choice.choice_label }}</option>
+
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                                {% if form.allowed_road_types.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.allowed_road_types.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.safety_factor.label_tag }}
+                            <span class="text-nowrap d-flex gap-2">
+                                <input type="range" class="form-range " id="{{ form.safety_factor.id_for_label }}" name="safety_factor" min="1" max="5" value="{{ form.safety_factor.value }}" oninput="this.nextElementSibling.value = this.value">
+                                <output class="d-flex">{{ form.safety_factor.initial }}</output>
+                            </span>
+
+                                {% if form.safety_factor.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.safety_factor.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.bike_path_preference.label_tag }}
+                                <span class="text-nowrap d-flex gap-2">
+                                <input type="range" class="form-range" id="{{ form.bike_path_preference.id_for_label }}" name="bike_path_preference" min="1" max="5" value="{{ form.bike_path_preference.value }}" oninput="this.nextElementSibling.value = this.value">
+                                <output class="d-flex">{{ form.safety_factor.initial }}</output>
+                                </span>
+                                    {% if form.bike_path_preference.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.bike_path_preference.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/841c2adb50.js" crossorigin="anonymous"></script>
+    <script>
+        function toggleStreetLight() {
+            const bulbIcon = document.getElementById('bulb-icon');
+            const streetLightInput = document.getElementById('street_light');
+            if (bulbIcon.classList.contains('fas')) {
+                bulbIcon.classList.remove('fas', 'yellow-bulb');
+                bulbIcon.classList.add('far');
+                streetLightInput.value = '';
+            } else {
+                bulbIcon.classList.remove('far');
+                bulbIcon.classList.add('fas', 'yellow-bulb');
+                streetLightInput.value = 'on';
+            }
+        }
+
+        // Initialize the icon state based on the form value
+        document.addEventListener('DOMContentLoaded', function() {
+            const streetLightInput = document.getElementById('street_light');
+            const bulbIcon = document.getElementById('bulb-icon');
+            if (streetLightInput.value) {
+                bulbIcon.classList.add('fas', 'yellow-bulb');
+            } else {
+                bulbIcon.classList.add('far');
+            }
+        });
+    </script>
+{% endblock content %}

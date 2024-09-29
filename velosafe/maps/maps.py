@@ -2,6 +2,7 @@ import folium
 from folium.plugins import MarkerCluster
 from gpx_converter import Converter
 
+
 class MapService:
     def __init__(self, starting_location=None, zoom_start=13):
         self.map = folium.Map(location=starting_location, zoom_start=zoom_start, zoom_control=False)
@@ -14,12 +15,11 @@ class MapService:
         folium.Marker(finish).add_to(self.map)
 
     def add_route_from_gpx(self, gpx_file):
-        dic = Converter(input_file=gpx_file).gpx_to_dictionary(latitude_key='latitude',
-                                                               longitude_key='longitude')
+        dic = Converter(input_file=gpx_file).gpx_to_dictionary(latitude_key="latitude", longitude_key="longitude")
 
         points = []
-        for index in range(len(dic['latitude'])):
-            points.append([dic['latitude'][index], dic['longitude'][index]])
+        for index in range(len(dic["latitude"])):
+            points.append([dic["latitude"][index], dic["longitude"][index]])
 
         route = folium.PolyLine(points, color="blue", weight=4, opacity=1)
         route.add_child(folium.Popup("inline explicit Popup"))

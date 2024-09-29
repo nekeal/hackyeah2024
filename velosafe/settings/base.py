@@ -41,6 +41,7 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt",
     "django_extensions",
     "celery",
+    "iommi",
 ]
 
 LOCAL_APPS = [

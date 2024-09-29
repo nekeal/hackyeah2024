@@ -1,5 +1,6 @@
 import osmnx as ox
 
+
 class Weights:
     def __init__(self, safety_factor: int, bike_lane_preference: int):
         self.ROADTYPE_WEIGHT = 5 * (safety_factor - 1) ** 2
@@ -34,14 +35,10 @@ class Weights:
     def apply_weights(G, *weights):
         nodes, edges = ox.graph_to_gdfs(G)
 
-        edges["weight"] = edges.apply(
-            lambda x: sum([fun(x) for fun in weights]), axis=1
-        )
+        edges["weight"] = edges.apply(lambda x: sum([fun(x) for fun in weights]), axis=1)
 
         # Normalize
-        edges["weight"] = (edges["weight"] - edges["weight"].min()) / (
-            edges["weight"].max() - edges["weight"].min()
-        )
+        edges["weight"] = (edges["weight"] - edges["weight"].min()) / (edges["weight"].max() - edges["weight"].min())
 
         G = ox.graph_from_gdfs(nodes, edges)
 
