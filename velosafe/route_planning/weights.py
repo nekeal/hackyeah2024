@@ -2,28 +2,35 @@ import osmnx as ox
 
 class Weights:
     def __init__(self, safety_factor: int, bike_lane_preference: int):
-        self.ROUDTYPE_WEIGHT = safety_factor
-        self.MAX_SPEED_WEIGHT = safety_factor
-        self.LENGTH_WEIGHT = 1 / safety_factor
+        self.ROUDTYPE_WEIGHT = 5 * (safety_factor - 1) ** 2
+        self.MAX_SPEED_WEIGHT = 5 * (safety_factor - 1) ** 2
+        self.LENGTH_WEIGHT = 1
+        self.ROADTYPE_WEIGHTS = {
+            "cycleway": 1,
+            "path": 1,
+            "pedestrian": 1,
+            "track": 1,
+            "unclassified": 1.5 * bike_lane_preference,
+            "residential": 1.5 * bike_lane_preference,
+            "living_street": 1.5 * bike_lane_preference,
+            "tertiary": 1.5 * bike_lane_preference,
+            "secondary": 2 * bike_lane_preference,
+            "primary": 3 * bike_lane_preference,
+            "_other": 1.5 * bike_lane_preference,
+        }
 
+    def get_weight_by_roadtype(self, record):
+        return self.ROADTYPE_WEIGHT * self.ROADTYPE_WEIGHTS.get(record["highway"], self.ROADTYPE_WEIGHTS["_other"])
 
-    @staticmethod
-    def get_weight_by_roadtype(record):
-
-        return ROADTYPE_WEIGHT * roadtype_weights.get(record["highway"], 4)
-
-    @staticmethod
-    def get_weight_by_maxspeed(record):
+    def get_weight_by_maxspeed(self, record):
         if record["highway"] in ["primary", "secondary", "tertiary"]:
             if int(record["maxspeed"]) > 30:
-                return MAXSPEED_WEIGHT * int(record["maxspeed"]) / 30
-        return MAXSPEED_WEIGHT
+                return self.MAXSPEED_WEIGHT * int(record["maxspeed"]) / 30
+        return self.MAXSPEED_WEIGHT
 
-    @staticmethod
-    def get_weight_by_length(record):
-        return LENGTH_WEIGHT * record["length"]
+    def get_weight_by_length(self, record):
+        return self.LENGTH_WEIGHT * record["length"]
 
-    @staticmethod
     def apply_weights(G, *weights):
         nodes, edges = ox.graph_to_gdfs(G)
 

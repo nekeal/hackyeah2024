@@ -1,12 +1,4 @@
 import osmnx as ox
-import networkx as nx
-import numpy as np
-
-import folium
-
-import seaborn as sns
-
-import branca.colormap as colm
 
 class StreetData:
     @staticmethod
