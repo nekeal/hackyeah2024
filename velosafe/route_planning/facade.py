@@ -35,7 +35,7 @@ class GeneralRoadTypes(TextChoices):
 class RoutePlanningPreferences:
     max_allowed_speed: Annotated[int, "km/h"] = 200
     street_light: bool | None = None
-    allowed_road_types: list[LinkTypes] = field(default_factory=lambda: [m for m in LinkTypes.__members__.values()])
+    allowed_road_types: list[GeneralRoadTypes] = field(default_factory=lambda: [m for m in GeneralRoadTypes.__members__.values()])
     safety_factor: int = 1 # 1-5, 1 - fast, 5 - safe
     bike_path_preference: int = 1 # 1-5 1 - bike lanes and roads treated the same, 5 - bike lanes preferred
 
