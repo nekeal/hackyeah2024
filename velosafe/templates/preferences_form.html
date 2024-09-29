@@ -94,7 +94,6 @@
         </div>
         <div class="preferences-form rounded p-3 my-3">
             <form method="GET" target="_blank" action="/user-form/" id="preferencesform">
-                {% csrf_token %}
                 <div class="mb-3">
                     {{ form.max_allowed_speed.label_tag }}
                     <span class="text-nowrap d-flex gap-2">
