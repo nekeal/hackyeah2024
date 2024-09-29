@@ -1,6 +1,7 @@
 import osmnx as ox
 import networkx as nx
 
+
 class Route:
     @staticmethod
     def find(G, start, end):

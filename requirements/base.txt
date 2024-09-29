@@ -17,7 +17,10 @@ branca==0.8.0
 celery==5.4.0
     # via -r requirements/base.in
 certifi==2024.8.30
-    # via requests
+    # via
+    #   pyogrio
+    #   pyproj
+    #   requests
 cffi==1.17.1
     # via cryptography
 charset-normalizer==3.3.2
@@ -91,6 +94,8 @@ folium==0.17.0
     # via -r requirements/base.in
 geojson==3.1.0
     # via -r requirements/base.in
+geopandas==1.0.1
+    # via osmnx
 gpx-converter==2.1.0
     # via -r requirements/base.in
 gpxpy==1.6.2
@@ -117,21 +122,36 @@ marshmallow==3.22.0
     # via environs
 matplotlib-inline==0.1.7
     # via ipython
+networkx==3.3
+    # via
+    #   -r requirements/base.in
+    #   osmnx
 numpy==2.1.1
     # via
     #   folium
+    #   geopandas
     #   gpx-converter
+    #   osmnx
     #   pandas
+    #   pyogrio
+    #   shapely
 oauthlib==3.2.2
     # via
     #   requests-oauthlib
     #   social-auth-core
+osmnx==1.9.3
+    # via -r requirements/base.in
 packaging==24.1
     # via
     #   drf-yasg
+    #   geopandas
     #   marshmallow
+    #   pyogrio
 pandas==2.2.3
-    # via gpx-converter
+    # via
+    #   geopandas
+    #   gpx-converter
+    #   osmnx
 parso==0.8.4
     # via jedi
 pexpect==4.9.0
@@ -154,8 +174,12 @@ pyjwt==2.9.0
     # via
     #   djangorestframework-simplejwt
     #   social-auth-core
+pyogrio==0.10.0
+    # via geopandas
 pyparsing==3.1.4
     # via iommi
+pyproj==3.6.1
+    # via geopandas
 python-dateutil==2.9.0.post0
     # via
     #   celery
@@ -176,10 +200,15 @@ pyyaml==6.0.2
 requests==2.32.3
     # via
     #   folium
+    #   osmnx
     #   requests-oauthlib
     #   social-auth-core
 requests-oauthlib==2.0.0
     # via social-auth-core
+shapely==2.0.6
+    # via
+    #   geopandas
+    #   osmnx
 six==1.16.0
     # via
     #   asttokens

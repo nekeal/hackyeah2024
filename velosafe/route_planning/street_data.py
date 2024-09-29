@@ -89,12 +89,10 @@ class StreetData:
 
         # Euclidean distance
         nodes["distance"] = np.sqrt(
-            np.square(nodes["lon"].fillna(0) - point.longitude)
-            + np.square(nodes["lat"].fillna(0) - point.latitude)
+            np.square(nodes["lon"].fillna(0) - point.longitude) + np.square(nodes["lat"].fillna(0) - point.latitude)
         )
 
         return nodes["distance"].idxmin()
-
 
     @staticmethod
     def save(G, filename):

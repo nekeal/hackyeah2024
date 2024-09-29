@@ -18,3 +18,5 @@ folium
 gpx-converter
 geojson
 iommi
+osmnx
+networkx

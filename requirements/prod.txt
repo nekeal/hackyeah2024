@@ -29,6 +29,8 @@ celery==5.4.0
 certifi==2024.8.30
     # via
     #   -r requirements/base.txt
+    #   pyogrio
+    #   pyproj
     #   requests
     #   sentry-sdk
 cffi==1.17.1
@@ -124,6 +126,10 @@ folium==0.17.0
     # via -r requirements/base.txt
 geojson==3.1.0
     # via -r requirements/base.txt
+geopandas==1.0.1
+    # via
+    #   -r requirements/base.txt
+    #   osmnx
 gpx-converter==2.1.0
     # via -r requirements/base.txt
 gpxpy==1.6.2
@@ -169,27 +175,41 @@ matplotlib-inline==0.1.7
     # via
     #   -r requirements/base.txt
     #   ipython
+networkx==3.3
+    # via
+    #   -r requirements/base.txt
+    #   osmnx
 numpy==2.1.1
     # via
     #   -r requirements/base.txt
     #   folium
+    #   geopandas
     #   gpx-converter
+    #   osmnx
     #   pandas
+    #   pyogrio
+    #   shapely
 oauthlib==3.2.2
     # via
     #   -r requirements/base.txt
     #   requests-oauthlib
     #   social-auth-core
+osmnx==1.9.3
+    # via -r requirements/base.txt
 packaging==24.1
     # via
     #   -r requirements/base.txt
     #   drf-yasg
+    #   geopandas
     #   gunicorn
     #   marshmallow
+    #   pyogrio
 pandas==2.2.3
     # via
     #   -r requirements/base.txt
+    #   geopandas
     #   gpx-converter
+    #   osmnx
 parso==0.8.4
     # via
     #   -r requirements/base.txt
@@ -226,10 +246,18 @@ pyjwt==2.9.0
     #   -r requirements/base.txt
     #   djangorestframework-simplejwt
     #   social-auth-core
+pyogrio==0.10.0
+    # via
+    #   -r requirements/base.txt
+    #   geopandas
 pyparsing==3.1.4
     # via
     #   -r requirements/base.txt
     #   iommi
+pyproj==3.6.1
+    # via
+    #   -r requirements/base.txt
+    #   geopandas
 python-dateutil==2.9.0.post0
     # via
     #   -r requirements/base.txt
@@ -257,6 +285,7 @@ requests==2.32.3
     # via
     #   -r requirements/base.txt
     #   folium
+    #   osmnx
     #   requests-oauthlib
     #   social-auth-core
 requests-oauthlib==2.0.0
@@ -265,6 +294,11 @@ requests-oauthlib==2.0.0
     #   social-auth-core
 sentry-sdk==2.14.0
     # via -r requirements/prod.in
+shapely==2.0.6
+    # via
+    #   -r requirements/base.txt
+    #   geopandas
+    #   osmnx
 six==1.16.0
     # via
     #   -r requirements/base.txt
