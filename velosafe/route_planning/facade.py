@@ -86,6 +86,7 @@ class RoutePlanningFacade:
     @classmethod
     @timing_val
     def plan_route(cls, input: RoutePlanningInput) -> geojson.GeoJSON:
+        print("Calculating route", input)
         G = cls._get_G('Nowy Targ')
         # G = StreetData.download("Nowy Targ")
         # G = StreetData.consolidate_intersections(G)

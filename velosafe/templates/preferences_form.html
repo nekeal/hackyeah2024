@@ -105,7 +105,7 @@
                         </form>
                     </div>
                     <div class="col-10 col-md-10 mb-10">
-                        <iframe class="w-100 h-100 vh-100 mb-10 p-10" src="http://localhost:8000/user-route/?csrfmiddlewaretoken=76QetALc4wqkp8XV7R7A67QCqqHM3eDwLhcIpkga2kcwgjx7Q66QG6zf00kh&max_allowed_speed=71&street_light=on&allowed_road_types=road&allowed_road_types=street&allowed_road_types=track&allowed_road_types=bike_path&safety_factor=3&bike_path_preference=3&points%5B%5D=49.473743&points%5B%5D=20.015556&points%5B%5D=49.513019&points%5B%5D=20.066818" ></iframe>
+                        <iframe id="map-container" class="w-100 h-100 vh-100 mb-10 p-10" src="http://localhost:8000/user-route/?max_allowed_speed=71&street_light=on&allowed_road_types=road&allowed_road_types=street&allowed_road_types=track&allowed_road_types=bike_path&safety_factor=3&bike_path_preference=3&points%5B%5D=49.473743&points%5B%5D=20.015556&points%5B%5D=49.513019&points%5B%5D=20.066818" ></iframe>
                 </div>
 {#                </div>#}
 
@@ -163,19 +163,22 @@
         }
         $("#preferencesform").on('submit', function (e) {
             e.preventDefault();
-
-            $.ajax({
-                url: '/user-route/',
-                method: 'get',
-                data: $(this).serialize(),
-
-                success: function(response) {
-                    $("#map-container").html(response);
-                    window.respone = response;
+            {#$("#map-container").replaceWithattr("src", "/user-route/?" + $("#preferencesform").serialize())#}
+            $("#map-container").replaceWith(`<iframe id="map-container" class="w-100 h-100 vh-100 mb-10 p-10" src="` + `/user-route/?` + $("#preferencesform").serialize() + `"</iframe>`)
+            {#$.ajax({#}
+            {#    url: '/user-route/',#}
+            {#    method: 'get',#}
+            {#    data: $(this).serialize(),#}
+            {##}
+            {#    success: function(response ,a, b) {#}
+            {#        $("#map-container").html(response);#}
+            {#        window.respone = response;#}
+            {#        console.log(a);#}
+            {#        console.log(b);#}
                     {#$('#elementYouWantRemove').remove();#}
                     {#$('#whereYouWantAddNewContent').append('<p> New content </p>')#}
-                }
-            })
+            {#    }#}
+            //})
         });
     </script>
 {% endblock content %}
