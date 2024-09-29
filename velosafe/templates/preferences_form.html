@@ -123,11 +123,11 @@
                     <label for="points">{% translate 'Points' %}</label>
                     <div id="points-container">
                         <!-- Initial point fields -->
-                        <div class="point-field border border-dark border-1 mb-2">
+                        <div class="point-field border-bottom border-black-50 border-2 mb-2">
                             <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
                             <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1">
                         </div>
-                        <div class="point-field border border border-dark border-1 mb-2">
+                        <div class="point-field border-bottom border-black-50 border-2 mb-2">
                             <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
                             <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1">
                         </div>
@@ -180,7 +180,7 @@
             const pointField = document.createElement('div');
             pointField.className = 'point-field';
             pointField.innerHTML = `
-            <div class="point-field border border-dark border-1 mb-2">
+            <div class="point-field border-bottom border-black-50 border-2 mb-2">
             <input type="text" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
             <input type="text" name="points[]" placeholder="Longitude" class="form-control mb-2">
             </div>
@@ -223,6 +223,15 @@
             const query = document.getElementById('searchInput').value;
             if (query) {
                 searchLocation(query);
+            }
+        });
+        document.getElementById('searchInput').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                console.log('Enter key pressed');
+                const query = document.getElementById('searchInput').value;
+                if (query) {
+                    searchLocation(query);
+                }
             }
         });
 
@@ -276,6 +285,8 @@
                             newLatitudeInput.value = location.lat;
                             newLongitudeInput.value = location.lon;
                         }
+                    resultsList.innerHTML = '';
+                    document.getElementById('searchInput').value = '';
                 });
             });
         }
