@@ -7,109 +7,123 @@
         .yellow-bulb {
             color: #efb60f;
         }
+
+        .preferences-form {
+            position: absolute;
+            z-index: 100;
+            left: calc(100% - 21rem);
+            max-width: 20rem;
+            background: rgba(255, 255, 255, .8);
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+        }
+        .map-container {
+            height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            overflow: hidden;
+        }
     </style>
-{% endblock %}
+{% endblock extra_head %}
 
 
 {% block content %}
-
-<div class="container">
-    <div class="container">
-        <div class="container">
-            <h1>{% translate 'Plan your route' %}</h1>
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="col-12 col-md-2">
-                        <form method="post" action="">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                {{ form.max_allowed_speed.label_tag }}
-                                <span class="text-nowrap d-flex gap-2">
-                                <input type="range" class="form-range" id="{{ form.max_allowed_speed.id_for_label }}" name="max_allowed_speed" min="20" max="120" step="10" {% if form.max_allowed_speed.widget.value != None %} value="{{ form.max_allowed_speed.widget.value|stringformat:'s' }}"{% endif %} oninput="this.nextElementSibling.value = this.value">
-                                <output>{{ form.max_allowed_speed.initial }}</output>
-
-                                {% if form.max_allowed_speed.errors %}
-                                    <div class="text-danger">
-                                        {{ form.max_allowed_speed.errors }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="mb-3">
-                                <span id="street-light-icon" class="text-nowrap" onclick="toggleStreetLight()">
-                                {{ form.street_light.label_tag }}
-                                    <i class="fas fa-lightbulb fs-2" id="bulb-icon"></i>
-                                </span>
-{#                                <input type="hidden" id="street_light" name="street_light" value="on">#}
-                                <input type="checkbox" id="street_light" name="street_light">
-{#                            {{ form.street_light }}#}
-                                {% if form.street_light.errors %}
-                                    <div class="text-danger">
-                                        {{ form.street_light.errors }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="mb-3">
-                                {{ form.allowed_road_types.label_tag }}
-                                <div id="allowed_road_types">
-                                    <select class="form-select form-select-sm" name="{{ form.allowed_road_types.name }}" id="{{ form.allowed_road_types.name }}" multiple>
-{#                                   {{ form.allowed_road_types | ipdb }}#}
-                                    {% for  key, value in form.allowed_road_types.field.choices %}
-                                        <option value="{{ key }}" {% if key == 'bike_path' %}selected{% endif %}>{{ value }}</option>
-                                    {% endfor %}
-                                    </select>
-                                </div>
-                                {% if form.allowed_road_types.errors %}
-                                    <div class="text-danger">
-                                        {{ form.allowed_road_types.errors }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="mb-3">
-                                {{ form.safety_factor.label_tag }}
-                            <span class="text-nowrap d-flex gap-2">
-                                <input type="range" class="form-range " id="{{ form.safety_factor.id_for_label }}" name="safety_factor" min="1" max="5" value="{{ form.safety_factor.value }}" oninput="this.nextElementSibling.value = this.value">
-                                <output class="d-flex">{{ form.safety_factor.initial }}</output>
-                            </span>
-
-                                {% if form.safety_factor.errors %}
-                                    <div class="text-danger">
-                                        {{ form.safety_factor.errors }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="mb-3">
-                                {{ form.bike_path_preference.label_tag }}
-                                <span class="text-nowrap d-flex gap-2">
-                                <input type="range" class="form-range" id="{{ form.bike_path_preference.id_for_label }}" name="bike_path_preference" min="1" max="5" value="{{ form.bike_path_preference.value }}" oninput="this.nextElementSibling.value = this.value">
-                                <output class="d-flex">{{ form.safety_factor.initial }}</output>
-                                </span>
-                                    {% if form.bike_path_preference.errors %}
-                                    <div class="text-danger">
-                                        {{ form.bike_path_preference.errors }}
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="points">{% translate 'Points' %}</label>
-                                <div id="points-container">
-                                    <!-- Initial point fields -->
-                                    <div class="point-field">
-                                        <input type="text" name="points[]" placeholder="Latitude" class="form-control mb-2">
-                                        <input type="text" name="points[]" placeholder="Longitude" class="form-control mb-2">
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-secondary" onclick="addPointField()">Add Point</button>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
+    <div class="row">
+        <div class="preferences-form rounded p-3 my-3">
+            <form method="GET" target="_blank" action="/user-form/" id="preferencesform">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.max_allowed_speed.label_tag }}
+                    <span class="text-nowrap d-flex gap-2">
+                    <input type="range" class="form-range" id="{{ form.max_allowed_speed.id_for_label }}" name="max_allowed_speed" min="20" max="120" step="10" {% if form.max_allowed_speed.widget.value != None %} value="{{ form.max_allowed_speed.widget.value|stringformat:'s' }}"{% endif %} oninput="this.nextElementSibling.value = this.value">
+                    <output>{{ form.max_allowed_speed.initial }}</output>
+                    </span>
+                    {% if form.max_allowed_speed.errors %}
+                        <div class="text-danger">
+                            {{ form.max_allowed_speed.errors }}
+                        </div>
+                    {% endif %}
                 </div>
-            </div>
+                <div class="mb-3">
+                    <span id="street-light-icon" class="text-nowrap" onclick="toggleStreetLight()">
+                    {{ form.street_light.label_tag }}
+                        <i class="fas fa-lightbulb fs-2" id="bulb-icon"></i>
+                    </span>
+                    <input type="checkbox" class="d-none" id="street_light" name="street_light">
+                    {% if form.street_light.errors %}
+                        <div class="text-danger">
+                            {{ form.street_light.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.allowed_road_types.label_tag }}
+                    <div id="allowed_road_types">
+                        <select class="form-select form-select-sm" name="{{ form.allowed_road_types.name }}" id="{{ form.allowed_road_types.name }}" multiple>
+                        {% for  key, value in form.allowed_road_types.field.choices %}
+                            <option value="{{ key }}" {% if key == 'bike_path' %}selected{% endif %}>{{ value }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {% if form.allowed_road_types.errors %}
+                        <div class="text-danger">
+                            {{ form.allowed_road_types.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.safety_factor.label_tag }}
+                <span class="text-nowrap d-flex gap-2">
+                    <input type="range" class="form-range " id="{{ form.safety_factor.id_for_label }}" name="safety_factor" min="1" max="5" value="{{ form.safety_factor.value }}" oninput="this.nextElementSibling.value = this.value">
+                    <output class="d-flex">{{ form.safety_factor.initial }}</output>
+                </span>
+
+                    {% if form.safety_factor.errors %}
+                        <div class="text-danger">
+                            {{ form.safety_factor.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.bike_path_preference.label_tag }}
+                    <span class="text-nowrap d-flex gap-2">
+                    <input type="range" class="form-range" id="{{ form.bike_path_preference.id_for_label }}" name="bike_path_preference" min="1" max="5" value="{{ form.bike_path_preference.value }}" oninput="this.nextElementSibling.value = this.value">
+                    <output class="d-flex">{{ form.safety_factor.initial }}</output>
+                    </span>
+                        {% if form.bike_path_preference.errors %}
+                        <div class="text-danger">
+                            {{ form.bike_path_preference.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="points">{% translate 'Points' %}</label>
+                    <div id="points-container">
+                        <!-- Initial point fields -->
+                        <div class="point-field border border-dark border-1 mb-2">
+                            <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
+                            <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1">
+                        </div>
+                        <div class="point-field border border border-dark border-1 mb-2">
+                            <input type="number" required step="any" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
+                            <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="addPointField()">Add Point</button>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+        <div class="map-container">
+            <iframe class="w-100 h-100 vh-100 mb-10 p-10" src="http://localhost:8000/user-route/?csrfmiddlewaretoken=76QetALc4wqkp8XV7R7A67QCqqHM3eDwLhcIpkga2kcwgjx7Q66QG6zf00kh&max_allowed_speed=71&street_light=on&allowed_road_types=road&allowed_road_types=street&allowed_road_types=track&allowed_road_types=bike_path&safety_factor=3&bike_path_preference=3&points%5B%5D=49.473743&points%5B%5D=20.015556&points%5B%5D=49.513019&points%5B%5D=20.066818" ></iframe>
         </div>
     </div>
+
     <script src="https://kit.fontawesome.com/841c2adb50.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function toggleStreetLight() {
             const bulbIcon = document.getElementById('bulb-icon');
@@ -146,8 +160,10 @@
             const pointField = document.createElement('div');
             pointField.className = 'point-field';
             pointField.innerHTML = `
-            <input type="text" name="points[]" placeholder="Latitude" class="form-control mb-2">
+            <div class="point-field border border-dark border-1 mb-2">
+            <input type="text" name="points[]" placeholder="Latitude" class="form-control mb-2 mt-1">
             <input type="text" name="points[]" placeholder="Longitude" class="form-control mb-2">
+            </div>
             <button type="button" class="btn btn-danger mb-2" onclick="removePointField(this)">Remove</button>
         `;
             container.appendChild(pointField);
@@ -157,5 +173,24 @@
             const pointField = button.parentElement;
             pointField.remove();
         }
+        $("#preferencesform").on('submit', function (e) {
+            e.preventDefault();
+            {#$("#map-container").replaceWithattr("src", "/user-route/?" + $("#preferencesform").serialize())#}
+            $("#map-container").replaceWith(`<iframe id="map-container" class="w-100 h-100 vh-100 mb-10 p-10" src="` + `/user-route/?` + $("#preferencesform").serialize() + `"</iframe>`)
+            {#$.ajax({#}
+            {#    url: '/user-route/',#}
+            {#    method: 'get',#}
+            {#    data: $(this).serialize(),#}
+            {##}
+            {#    success: function(response ,a, b) {#}
+            {#        $("#map-container").html(response);#}
+            {#        window.respone = response;#}
+            {#        console.log(a);#}
+            {#        console.log(b);#}
+                    {#$('#elementYouWantRemove').remove();#}
+                    {#$('#whereYouWantAddNewContent').append('<p> New content </p>')#}
+            {#    }#}
+            //})
+        });
     </script>
 {% endblock content %}

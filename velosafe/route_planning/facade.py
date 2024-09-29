@@ -1,3 +1,6 @@
+import copy
+import time
+from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Annotated
 
@@ -39,7 +42,7 @@ class LinkTypes(TextChoices):
     living_street = "living_street", _("living street link")
 
 
-@dataclass
+@dataclass(frozen=True)
 class RoutePlanningPreferences:
     max_allowed_speed: Annotated[int, "km/h"] = 200
     street_light: bool | None = None
@@ -51,18 +54,43 @@ class RoutePlanningPreferences:
     car_traffic_factor: int = 1 # 1-5, 1 - car traffic not affecting, 5 - avoid big traffic on the streets
 
 
-@dataclass
+@dataclass(frozen=True)
 class RoutePlanningInput:
     points: list[Point]
     preference: RoutePlanningPreferences
 
+def timing_val(func):
+    def wrapper(*arg, **kw):
+        '''source: http://www.daniweb.com/code/snippet368.html'''
+        t1 = time.time()
+        res = func(*arg, **kw)
+        t2 = time.time()
+        print(f'Function: {func.__name__}, Time: {t2 - t1}')
+        return res
+    return wrapper
+
 
 class RoutePlanningFacade:
-    @staticmethod
-    def plan_route(input: RoutePlanningInput) -> geojson.GeoJSON:
-        G = StreetData.download("Nowy Targ")
-        G = StreetData.consolidate_intersections(G)
-        G = StreetData.fill_max_speed(G)
+    G = None
+
+    @classmethod
+    @timing_val
+    def _get_G(cls, city):
+        if cls.G is None:
+            G = StreetData.download(city)
+            G = StreetData.consolidate_intersections(G)
+            G = StreetData.fill_max_speed(G)
+            cls.G = G
+        return copy.deepcopy(cls.G)
+
+    @classmethod
+    @timing_val
+    def plan_route(cls, input: RoutePlanningInput) -> geojson.GeoJSON:
+        print("Calculating route", input)
+        G = cls._get_G('Nowy Targ')
+        # G = StreetData.download("Nowy Targ")
+        # G = StreetData.consolidate_intersections(G)
+        # G = StreetData.fill_max_speed(G)
         G_car = G.copy()
         G = StreetData.remove_streets_exceeding_max_speed(G, input.preference.max_allowed_speed)
         G = StreetData.remove_disallowed_road_types(G, input.preference.allowed_road_types)
