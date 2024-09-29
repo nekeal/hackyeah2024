@@ -5,74 +5,7 @@
 
     <style>
 
-        .search {
-            position: absolute !important;
-            z-index: 2137 !important;
-            max-width: 30rem !important;
-        }
-        .list-group {
-            position: absolute !important;
-            z-index: 2137 !important;
-            width : calc(100% - 1.5rem);
-        }
+        
     </style>
 
 {% endblock extra_head %}
-
-{% block inline_js %}
-    <script>
-        document.getElementById('searchBtn').addEventListener('click', () => {
-            console.log('Search button clicked');
-            const query = document.getElementById('searchInput').value;
-            if (query) {
-                searchLocation(query);
-            }
-        });
-
-        async function searchLocation(query) {
-            const url = `https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${encodeURIComponent(query)}`;
-            console.log('Fetching location data from:', url);
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                displayResults(data);
-            } catch (error) {
-                console.error('Error fetching location data:', error);
-            }
-        }
-
-        function displayResults(locations) {
-            const resultsList = document.getElementById('resultsList');
-            resultsList.innerHTML = '';
-
-            console.log('Displaying results:', locations);
-            locations.forEach(location => {
-                const listItem = document.createElement('li');
-                listItem.classList.add('list-group-item');
-                listItem.innerHTML = `<strong>${location.display_name}</strong> <br> Lat: ${location.lat}, Lon: ${location.lon}`;
-                resultsList.appendChild(listItem);
-
-                // Optional: Handle click event on location result
-                listItem.addEventListener('click', () => {
-                    console.log('Location clicked:', location);
-                    console.log(`Selected: ${location.display_name}`);
-                    // Handle further logic like setting the location on a map, etc.
-                });
-            });
-        }
-    </script>
-{% endblock inline_js %}
-
-{% block content %}
-
-    <div class="container mt-5 search">
-        <div class="input-group mb-3">
-            <input id="searchInput" type="text" class="form-control" placeholder="Search location...">
-            <button class="btn btn-primary" type="button" id="searchBtn">Search</button>
-        </div>
-        <ul id="resultsList" class="list-group"></ul>
-    </div>
-
-{{ map|safe }}
-
-{% endblock content %}
