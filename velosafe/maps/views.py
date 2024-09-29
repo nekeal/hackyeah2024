@@ -1,8 +1,7 @@
 from django import forms
 from django.core.cache import cache
 from django.http import HttpResponse
-from django.views import View
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, View
 
 from velosafe.route_planning.facade import GeneralRoadTypes, RoutePlanningFacade, RoutePlanningInput, \
     RoutePlanningPreferences
@@ -15,13 +14,18 @@ from velosafe.utils import get_hash
 class MapView(TemplateView):
     template_name = "map.html"
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.map_service = MapService(starting_location=[49.477446198395675, 20.03088213331825], zoom_start=14)
+
     def get_map(self):
-        map_service = MapService(starting_location=[49.477446198395675, 20.03088213331825], zoom_start=14)
-        return map_service.get_html()
+        return self.map_service.get_html()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["map"] = self.get_map()
+
+        context['map'] = self.get_map()
+
         return context
 
 

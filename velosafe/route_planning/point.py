@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from attr.setters import frozen
-
 
 @dataclass(frozen=True)
 class Point:

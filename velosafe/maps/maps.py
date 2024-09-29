@@ -14,6 +14,9 @@ class MapService:
         folium.Marker(start).add_to(self.map)
         folium.Marker(finish).add_to(self.map)
 
+    def add_search_bar(self):
+        folium.plugins.Geocoder().add_to(self.map)
+
     def add_route_from_gpx(self, gpx_file):
         dic = Converter(input_file=gpx_file).gpx_to_dictionary(latitude_key="latitude", longitude_key="longitude")
 
@@ -38,9 +41,3 @@ class MapService:
 
     def save_to_file(self):
         self.map.save("index.html")
-
-
-# map_service = MapService()
-# map_service.add_route_from_gpx("mapa.gpx")
-# map_service.fit_bounds()
-# map_service.save_to_file()
