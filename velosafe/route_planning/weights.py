@@ -1,10 +1,11 @@
 import osmnx as ox
 
 class Weights:
-    def __init__(self, safety_factor: int, bike_lane_preference: int):
+    def __init__(self, safety_factor: int, bike_lane_preference: int, street_lights: bool | None = None):
         self.ROADTYPE_WEIGHT = 5 * (safety_factor - 1) ** 2
         self.MAX_SPEED_WEIGHT = 5 * (safety_factor - 1) ** 2
         self.LENGTH_WEIGHT = 1
+        self.STREET_LIGHTS_WEIGHT = 10 if street_lights is True else 0
         self.ROADTYPE_WEIGHTS = {
             "cycleway": 1,
             "path": 1,
@@ -30,6 +31,9 @@ class Weights:
 
     def get_weight_by_length(self, record):
         return self.LENGTH_WEIGHT * record["length"]
+    
+    def get_weight_by_street_lights(self, record):
+        return self.STREET_LIGHTS_WEIGHT * (1 if record['street_lights'] else 0)
 
     def apply_weights(G, *weights):
         nodes, edges = ox.graph_to_gdfs(G)

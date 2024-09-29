@@ -12,6 +12,7 @@ import osmnx as ox
 from velosafe.route_planning.geojson_generator import GeoJsonGenerator
 from velosafe.route_planning.point import Point
 from velosafe.route_planning.street_data import StreetData
+from velosafe.route_planning.mocks import StreetDataMocks
 from velosafe.route_planning.weights import Weights
 from velosafe.route_planning.route import Route
 from velosafe.maps.maps import MapService
@@ -57,6 +58,9 @@ class RoutePlanningFacade:
         G = StreetData.download('Nowy Targ')
         G = StreetData.consolidate_intersections(G)
         G = StreetData.fill_max_speed(G)
+        G = StreetData.remove_streets_exceeding_max_speed(G, input.preference.max_allowed_speed)
+        G = StreetData.remove_disallowed_road_types(G, input.preference.allowed_road_types)
+        G = StreetDataMocks.mock_street_lights(G)
 
         W = Weights(input.preference.safety_factor, input.preference.bike_path_preference)
         G = Weights.apply_weights(G, W.get_weight_by_roadtype, W.get_weight_by_maxspeed, W.get_weight_by_length)
@@ -70,6 +74,7 @@ class RoutePlanningFacade:
             routes.append(Route.find(G, start_node, end_node))
 
         G = reduce(lambda r1, r2: nx.disjoint_union(r1, r2), routes)
+        print(G)
 
         nodes, edges = ox.graph_to_gdfs(G)
 

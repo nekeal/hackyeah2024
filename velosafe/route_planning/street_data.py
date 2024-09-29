@@ -1,7 +1,24 @@
 import osmnx as ox
 import numpy as np
 
+from django.db.models import TextChoices
+from django.utils.translation import gettext_lazy as _
+
 from velosafe.route_planning.point import Point
+
+class LinkTypes(TextChoices):
+    primary = "primary", _("primary link")
+    residential = "residential", _("residential link")
+    primary_link = "primary_link", _("primary link")
+    service = "service", _("service link")
+    secondary = "secondary", _("secondary link")
+    tertiary = "tertiary", _("tertiary link")
+    pedestrian = "pedestrian", _("pedestrian link")
+    track = "track", _("track link")
+    cycleway = "cycleway", _("cycle way link")
+    unclassified = "unclassified", _("unclassified link")
+    path = "path", _("path link")
+    living_street = "living_street", _("living street link")
 
 class StreetData:
     @staticmethod
@@ -41,6 +58,35 @@ class StreetData:
         G = ox.graph_from_gdfs(nodes, edges)
 
         return G
+    
+    @staticmethod
+    def remove_streets_exceeding_max_speed(G, max_speed):
+        if max_speed is None:
+            return G
+
+        nodes, edges = ox.graph_to_gdfs(G)
+        edges = edges[edges['maxspeed'].map(int) <= max_speed]
+    
+        return ox.graph_from_gdfs(nodes, edges)
+    
+    @staticmethod
+    def remove_disallowed_road_types(G, allowed_road_types):
+        road_types = []
+        for type in allowed_road_types:
+            match type:
+                case 'street':
+                    road_types.extend(['secondary', 'tertiary', 'service', 'primary_link', 'secondary_link', 'tertiary_link', 'residential', 'living_street', 'unclassified'])
+                case 'road':
+                    road_types.extend(['primary'])
+                case 'bike_path':
+                    road_types.extend(['bike_path', 'pedestrian', 'cycleway'])
+                case 'track':
+                    road_types.extend(['track'])
+
+        nodes, edges = ox.graph_to_gdfs(G)
+        edges = edges[edges['highway'].isin(road_types)]
+
+        return ox.graph_from_gdfs(nodes, edges)
     
     @staticmethod
     def get_closest_node_id(G, point: Point):
