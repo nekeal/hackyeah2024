@@ -38,6 +38,47 @@
             z-index: 2137 !important;
             width: calc(100% - 1.5rem);
         }
+        .popup {
+            visibility: hidden;
+            min-width: 80px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the popup above the button */
+            left: 50%;
+            margin-left: -40px;
+        }
+
+        .popup::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .show {
+            visibility: visible;
+            -webkit-animation: fadeIn 0.5s;
+            animation: fadeIn 0.5s;
+        }
+
+        @-webkit-keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
     </style>
 {% endblock extra_head %}
 
@@ -132,13 +173,18 @@
                             <input type="number" required step="any" name="points[]" placeholder="Longitude" class="form-control mb-2 mt-1">
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary" onclick="addPointField()">Add Point</button>
+
+                        <button type="button" class="btn btn-primary" onclick="addPointField()">Add Point</button>
                 </div>
                 <button type="submit" class="btn btn-success">Submit</button>
+                <span>
+                    <div id="copyPopup" class="popup index-z-1">Copied!</div>
+                       <i id="copyButton" class="fa-solid fa-copy justify-content-end btn"></i>
+                </span>
             </form>
         </div>
         <div class="map-container">
-            <iframe class="w-100 h-100 vh-100 mb-10 p-10" src="http://localhost:8000/user-route/?csrfmiddlewaretoken=76QetALc4wqkp8XV7R7A67QCqqHM3eDwLhcIpkga2kcwgjx7Q66QG6zf00kh&max_allowed_speed=71&street_light=on&allowed_road_types=road&allowed_road_types=street&allowed_road_types=track&allowed_road_types=bike_path&safety_factor=3&bike_path_preference=3&points%5B%5D=49.473743&points%5B%5D=20.015556&points%5B%5D=49.513019&points%5B%5D=20.066818" ></iframe>
+            <iframe id="map-container" class="w-100 h-100 vh-100 mb-10 p-10" src="http://localhost:8000/user-route/?csrfmiddlewaretoken=76QetALc4wqkp8XV7R7A67QCqqHM3eDwLhcIpkga2kcwgjx7Q66QG6zf00kh&max_allowed_speed=71&street_light=on&allowed_road_types=road&allowed_road_types=street&allowed_road_types=track&allowed_road_types=bike_path&safety_factor=3&bike_path_preference=3&points%5B%5D=49.473743&points%5B%5D=20.015556&points%5B%5D=49.513019&points%5B%5D=20.066818" ></iframe>
         </div>
     </div>
 
@@ -197,20 +243,25 @@
             e.preventDefault();
             {#$("#map-container").replaceWithattr("src", "/user-route/?" + $("#preferencesform").serialize())#}
             $("#map-container").replaceWith(`<iframe id="map-container" class="w-100 h-100 vh-100 mb-10 p-10" src="` + `/user-route/?` + $("#preferencesform").serialize() + `"</iframe>`)
-            {#$.ajax({#}
-            {#    url: '/user-route/',#}
-            {#    method: 'get',#}
-            {#    data: $(this).serialize(),#}
-            {##}
-            {#    success: function(response ,a, b) {#}
-            {#        $("#map-container").html(response);#}
-            {#        window.respone = response;#}
-            {#        console.log(a);#}
-            {#        console.log(b);#}
-                    {#$('#elementYouWantRemove').remove();#}
-                    {#$('#whereYouWantAddNewContent').append('<p> New content </p>')#}
-            {#    }#}
-            //})
+
+        });
+        $('#copyButton').click(function() {
+            // Text to be copied
+            let textToCopy = $("#map-container").attr("src");
+            console.log(textToCopy);
+            // Create a temporary input element
+            let tempInput = $('<input>');
+            $('body').append(tempInput);
+            tempInput.val(textToCopy).select();
+            document.execCommand('copy');
+            tempInput.remove();
+
+            // Show the popup
+            let popup = $('#copyPopup');
+            popup.addClass('show');
+            setTimeout(function() {
+                popup.removeClass('show');
+            }, 2000); // Hide the popup after 2 seconds
         });
     </script>
 {% endblock content %}
@@ -262,14 +313,14 @@
                 listItem.addEventListener('click', () => {
                     console.log('Location clicked:', location);
                     console.log(`Selected: ${location.display_name}`);
-                    
+
                     const pointFields = document.querySelectorAll('.point-field');
                     let applied = false;
                     for (let i = 0; i < pointFields.length; i++) {
                         const pointField = pointFields[i];
                         const latitudeInput = pointField.querySelector('input[name="points[]"][placeholder="Latitude"]');
                         const longitudeInput = pointField.querySelector('input[name="points[]"][placeholder="Longitude"]');
-                        
+
                         if (latitudeInput.value === '' && longitudeInput.value === '') {
                             latitudeInput.value = location.lat;
                             longitudeInput.value = location.lon;
