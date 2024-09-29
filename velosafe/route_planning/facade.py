@@ -1,8 +1,7 @@
-from dataclasses import dataclass, Field, field
+from dataclasses import dataclass, field
 from typing import Annotated
 
 import geojson
-from IPython.core.display import GeoJSON
 from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 from functools import reduce
@@ -17,6 +16,11 @@ from velosafe.route_planning.weights import Weights
 from velosafe.route_planning.route import Route
 from velosafe.maps.maps import MapService
 
+class GeneralRoadTypes(TextChoices):
+    road = "road", _("Road")
+    street = "street", _("Street")
+    track = "track", _("Track")
+    bike_path = "bike_path", _("Bike path")
 
 class LinkTypes(TextChoices):
     primary = "primary", _("primary link")
@@ -33,24 +37,20 @@ class LinkTypes(TextChoices):
     living_street = "living_street", _("living street link")
 
 
-class GeneralRoadTypes(TextChoices):
-    road = 'road', _('road')
-    street = 'street', _('street')
-    track = 'track', _('track')
-    bike_path = 'bike_path', _('bike_path')
-
 @dataclass
 class RoutePlanningPreferences:
     max_allowed_speed: Annotated[int, "km/h"] = 200
     street_light: bool | None = None
     allowed_road_types: list[GeneralRoadTypes] = field(default_factory=lambda: [m for m in GeneralRoadTypes.__members__.values()])
-    safety_factor: int = 1 # 1-5, 1 - fast, 5 - safe
-    bike_path_preference: int = 1 # 1-5 1 - bike lanes and roads treated the same, 5 - bike lanes preferred
+    safety_factor: int = 1  # 1-5, 1 - fast, 5 - safe
+    bike_path_preference: int = 1  # 1-5 1 - bike lanes and roads treated the same, 5 - bike lanes preferred
+
 
 @dataclass
 class RoutePlanningInput:
     points: list[Point]
     preference: RoutePlanningPreferences
+
 
 class RoutePlanningFacade:
     @staticmethod
